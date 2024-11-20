@@ -22,16 +22,15 @@ public class Response {
     private int contentLength = 0;
     private final String body;
 
-    public Response(int statusCode, ContentType contentType, String fileName) {
+    public Response(int statusCode, ContentType contentType, String path) {
         this.statusCode = statusCode;
-        this.body = fileName;
+        this.body = path;
         if (statusCode >= 400) {
             this.contentType = ContentType.TEXT_PLAIN;
             this.contentLength = -1;
         } else {
             this.contentType = contentType;
             if (body != null) {
-                String path = fileName;
                 FileInputStream f = null;
                 try {
                     f = new FileInputStream(path);
@@ -63,6 +62,6 @@ public class Response {
                 break;
             }
         }
-        return "HTTP/1.1 " + statusCode + " " + statusType + "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength + "\nConnection: keep-alive";
+        return "HTTP/1.1 " + statusCode + " " + statusType + "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength + "\nConnection: keep-alive" + "\n" + body;
     }
 }

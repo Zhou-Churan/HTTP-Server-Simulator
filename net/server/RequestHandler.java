@@ -105,6 +105,7 @@ public class RequestHandler {
         } else {
             System.out.println("Invalid request");
         }
+        System.out.println("\n\n\n");
     }
 
     public Response buildResponse() {

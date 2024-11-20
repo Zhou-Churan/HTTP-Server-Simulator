@@ -6,8 +6,12 @@ import java.util.Scanner;
 
 import message.Request;
 import message.Request.RequestType;
+import message.Response;
 
 public class Client {
+
+    public static ResponseHandler responseHandler = new ResponseHandler();
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter hostname: ");
@@ -21,6 +25,8 @@ public class Client {
             DataOutputStream out = new DataOutputStream(client.getOutputStream());
             String exit = "no";
             while (exit.equals("no")) {
+
+                // sending request
                 System.out.println("Enter request type: ");
                 String method = sc.next();
                 Request request = null;
@@ -54,11 +60,11 @@ public class Client {
                 }
                 System.out.println("\n\n\n");
                 out.writeUTF(request.getMessage());
+
+                // getting response
                 DataInputStream in = new DataInputStream(client.getInputStream());
-                String response = in.readUTF();
-                System.out.println("---Received response---");
-                System.out.println(response);
-                System.out.println("\n\n\n");
+                Response response = responseHandler.parseResponse(in.readUTF());
+                responseHandler.handle(response);
                 System.out.println("Do you want to exit the program? [yes/no]");
                 exit = sc.next();
             }

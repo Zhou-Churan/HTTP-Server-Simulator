@@ -24,13 +24,12 @@ public class Request {
     }
 
     // POST
-    public Request(RequestType requestType, String hostAddress, int port, ContentType contentType, String fileName) throws FileNotFoundException {
+    public Request(RequestType requestType, String hostAddress, int port, ContentType contentType, String path) throws FileNotFoundException {
         this.requestType = requestType;
         this.hostAddress = hostAddress;
         this.port = port;
         this.contentType = contentType;
-        this.body = fileName;
-        String path = fileName;
+        this.body = path;
         FileInputStream f = null;
         try {
             f = new FileInputStream(path);
