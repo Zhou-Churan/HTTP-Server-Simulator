@@ -27,7 +27,7 @@ public class Server extends Thread {
                     server = serverSocket.accept();
                     System.out.println("Connected, remote IP : " + server.getRemoteSocketAddress());
                 }
-                System.out.println("\n\n\n");
+                System.out.println("\n");
                 DataInputStream in = new DataInputStream(server.getInputStream());
                 String message = in.readUTF();
                 Request request = requestHandler.parseRequest(message);
@@ -47,7 +47,7 @@ public class Server extends Thread {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter port: ");
+        System.out.print("Enter port: ");
         int port = sc.nextInt();
         try {
             Thread t = new Server(port);

@@ -101,34 +101,33 @@ public class RequestHandler {
                 is.close();
                 os.close();
             }
-            System.out.println("Receive file " + dest);
+            System.out.println("Receive file! Saved at : " + dest);
         } else {
             System.out.println("Invalid request");
         }
-        System.out.println("\n\n\n");
+        System.out.println("\n");
     }
 
     public Response buildResponse() {
         System.out.println("---Sending response---");
         System.out.println("Enter file name:");
         Scanner sc = new Scanner(System.in);
-        String fileName = "net/server/" + sc.next();
-        String path = fileName;
+        String path = "net/server/" + sc.next();
         int statusCode = 200;
         String opt;
         System.out.println("Do you want to enter mode 500? [yes/no]");
         opt = sc.next();
         if (opt.equals("yes")) {
-            return new Response(500, Request.ContentType.TEXT_PLAIN, fileName);
+            return new Response(500, Request.ContentType.TEXT_PLAIN, path);
         }
         if (new File(path).exists()) {
-            if (fileDirectory.get(fileName)) {
+            if (fileDirectory.get(path)) {
                 statusCode = 304;
             } else {
                 System.out.println("Do you want to enter mode 405? [yes/no]");
                 opt = sc.next();
                 if (opt.equals("yes")) {
-                    return new Response(405, Request.ContentType.TEXT_PLAIN, fileName);
+                    return new Response(405, Request.ContentType.TEXT_PLAIN, path);
                 }
                 System.out.println("Do you want to move the server url (mode 301/302)? [yes/no]");
                 opt = sc.next();
@@ -143,12 +142,15 @@ public class RequestHandler {
                 }
             }
             Request.ContentType contentType;
-            if (fileName.endsWith(".txt")) contentType = Request.ContentType.TEXT_PLAIN;
-            else if (fileName.endsWith(".html")) contentType = Request.ContentType.TEXT_HTML;
+            if (path.endsWith(".txt")) contentType = Request.ContentType.TEXT_PLAIN;
+            else if (path.endsWith(".html")) contentType = Request.ContentType.TEXT_HTML;
             else contentType = Request.ContentType.IMAGE_JPG;
-            return new Response(statusCode, contentType, fileName);
+            fileDirectory.put(path, true);
+            System.out.println("\n");
+            return new Response(statusCode, contentType, path);
         } else {
-            return new Response(404, Request.ContentType.TEXT_PLAIN, fileName);
+            System.out.println("\n");
+            return new Response(404, Request.ContentType.TEXT_PLAIN, path);
         }
     }
 

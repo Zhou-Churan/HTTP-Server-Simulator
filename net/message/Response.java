@@ -54,6 +54,18 @@ public class Response {
         }
     }
 
+    public String getFilePath() {
+        return body;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
     public String getMessage() {
         StatusType statusType = null;
         for (Map.Entry<StatusType, Integer> m : status.entrySet()) {

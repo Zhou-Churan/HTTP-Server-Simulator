@@ -43,7 +43,7 @@ public class Client {
                         contentType = Request.ContentType.IMAGE_JPG;
                     } else {
                         System.out.println("Invalid file type");
-                        System.out.println("\n\n\n");
+                        System.out.println("\n");
                         System.out.println("Do you want to exit the program? [yes/no]");
                         exit = sc.next();
                         continue;
@@ -53,18 +53,18 @@ public class Client {
                     request = new Request(RequestType.GET, client.getLocalSocketAddress().toString(), port);
                 } else {
                     System.out.println("Invalid request type");
-                    System.out.println("\n\n\n");
+                    System.out.println("\n");
                     System.out.println("Do you want to exit the program? [yes/no]");
                     exit = sc.next();
                     continue;
                 }
-                System.out.println("\n\n\n");
+                System.out.println("\n");
                 out.writeUTF(request.getMessage());
 
                 // getting response
                 DataInputStream in = new DataInputStream(client.getInputStream());
                 Response response = responseHandler.parseResponse(in.readUTF());
-                responseHandler.handle(response);
+                responseHandler.handleResponse(response);
                 System.out.println("Do you want to exit the program? [yes/no]");
                 exit = sc.next();
             }
