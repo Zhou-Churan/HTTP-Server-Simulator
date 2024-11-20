@@ -80,7 +80,7 @@ public class RequestHandler {
             String dest;
             Date data = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-            dest = "server/" + formatter.format(data);
+            dest = "net/server/" + formatter.format(data);
             Request.ContentType contentType = request.getContentType();
             if (contentType == Request.ContentType.TEXT_PLAIN) {
                 dest += ".txt";
@@ -112,7 +112,7 @@ public class RequestHandler {
         System.out.println("Enter file name:");
         Scanner sc = new Scanner(System.in);
         String fileName = "net/server/" + sc.next();
-        String path = "../" + fileName;
+        String path = fileName;
         int statusCode = 200;
         String opt;
         System.out.println("Do you want to enter mode 500? [yes/no]");

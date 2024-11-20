@@ -30,7 +30,7 @@ public class Request {
         this.port = port;
         this.contentType = contentType;
         this.body = fileName;
-        String path = "../" + fileName;
+        String path = fileName;
         FileInputStream f = null;
         try {
             f = new FileInputStream(path);
@@ -61,7 +61,7 @@ public class Request {
     }
 
     public String getFilePath() {
-        return "../" + body;
+        return body;
     }
 
     public String getMessage() {

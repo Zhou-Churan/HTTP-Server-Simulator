@@ -31,7 +31,7 @@ public class Response {
         } else {
             this.contentType = contentType;
             if (body != null) {
-                String path = "../" + fileName;
+                String path = fileName;
                 FileInputStream f = null;
                 try {
                     f = new FileInputStream(path);
