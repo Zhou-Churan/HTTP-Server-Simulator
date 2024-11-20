@@ -1,9 +1,11 @@
 package message;
+
+import message.Request.ContentType;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
-import message.Request.ContentType;
 
 public class Response {
     public enum StatusType {OK, Moved_Permanently, Found, Not_Modified, Not_Found, Method_Not_Allowed, Internal_Server_Error}
