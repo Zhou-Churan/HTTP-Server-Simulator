@@ -29,7 +29,7 @@ public class Client {
                 // sending request
                 System.out.println("Enter request type: ");
                 String method = sc.next();
-                Request request = null;
+                Request request;
                 if (method.equals("POST")) {
                     System.out.println("Enter file name: ");
                     String fileName = sc.next();
