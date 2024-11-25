@@ -16,7 +16,11 @@ public class Server extends Thread {
         serverSocket.setSoTimeout(30 * 1000);
     }
 
-    private final RequestHandler requestHandler = new RequestHandler();
+    private final RequestHandler handler = new RequestHandler();
+
+    public RequestHandler getRequestHandler() {
+        return handler;
+    }
 
     public void run() {
         Socket server = null;
@@ -30,6 +34,7 @@ public class Server extends Thread {
                 System.out.println("\n");
                 DataInputStream in = new DataInputStream(server.getInputStream());
                 String message = in.readUTF();
+                RequestHandler requestHandler = getRequestHandler();
                 Request request = requestHandler.parseRequest(message);
                 requestHandler.handleRequest(request);
                 Response response = requestHandler.buildResponse();
