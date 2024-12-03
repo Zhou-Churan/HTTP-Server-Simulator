@@ -22,7 +22,6 @@ public class RequestHandler {
     }
 
     public Request parseRequest(String message) throws IOException {
-        // TODO
         String methodPattern = "^(\\w+)\\s";
         String pathPattern = "\\s([^\\s]+)\\sHTTP/";
         String contentTypePattern = "Content-Type:\\s*([^\\r\\n]+)";
@@ -61,17 +60,55 @@ public class RequestHandler {
         }
 
         if (method.equals("GET")) {
-            return new Request(Request.RequestType.GET, hostAddress, port);
-        } else {
+            return new Request(Request.RequestType.GET, hostAddress, port, fileName);
+        } else if (method.equals("POST")) {
             return new Request(Request.RequestType.POST, hostAddress, port, Request.ContentType.valueOf(contentType), fileName);
+        } else {
+            return new Request(hostAddress, port, method);
         }
 
     }
 
-    public void handleRequest(Request request) throws IOException {
+    public Response handleRequest(Request request) throws IOException {
+        Scanner sc = new Scanner(System.in);
         if (request.getRequestType() == Request.RequestType.GET) {
             System.out.println("---Received GET request---");
             System.out.println(request.getMessage());
+            String path = request.getFilePath();
+            int statusCode = 200;
+            String opt;
+            System.out.println("Do you want to enter mode 500? [yes/no]");
+            opt = sc.next();
+            if (opt.equals("yes")) {
+                return new Response(500, Request.ContentType.TEXT_PLAIN, path);
+            }
+            if (new File(path).exists()) {
+                if (fileDirectory.get(path)) {
+                    statusCode = 304;
+                } else {
+                    System.out.println("Do you want to move the server url (mode 301/302)? [yes/no]");
+                    opt = sc.next();
+                    if (opt.equals("yes")) {
+                        System.out.println("Permanently or Temporarily? [p/t]");
+                        opt = sc.next();
+                        if (opt.equals("p")) {
+                            statusCode = 301;
+                        } else {
+                            statusCode = 302;
+                        }
+                    }
+                }
+                Request.ContentType contentType;
+                if (path.endsWith(".txt")) contentType = Request.ContentType.TEXT_PLAIN;
+                else if (path.endsWith(".html")) contentType = Request.ContentType.TEXT_HTML;
+                else contentType = Request.ContentType.IMAGE_JPG;
+                fileDirectory.put(path, true);
+                System.out.println("\n");
+                return new Response(statusCode, contentType, path);
+            } else {
+                System.out.println("\n");
+                return new Response(404, Request.ContentType.TEXT_PLAIN, path);
+            }
         } else if (request.getRequestType() == Request.RequestType.POST) {
             System.out.println("---Received POST request---");
             System.out.println(request.getMessage());
@@ -102,12 +139,34 @@ public class RequestHandler {
                 os.close();
             }
             System.out.println("Receive file! Saved at : " + dest);
+            int statusCode = 200;
+            String opt;
+            System.out.println("Do you want to enter mode 500? [yes/no]");
+            opt = sc.next();
+            if (opt.equals("yes")) {
+                return new Response(500);
+            } else {
+                System.out.println("Do you want to move the server url (mode 301/302)? [yes/no]");
+                opt = sc.next();
+                if (opt.equals("yes")) {
+                    System.out.println("Permanently or Temporarily? [p/t]");
+                    opt = sc.next();
+                    if (opt.equals("p")) {
+                        statusCode = 301;
+                    } else {
+                        statusCode = 302;
+                    }
+                }
+                return new Response(statusCode);
+            }
         } else {
-            System.out.println("Invalid request");
+            System.out.println("---Received INVALID request---");
+            System.out.println(request.getMessage());
+            return new Response(405);
         }
-        System.out.println("\n");
     }
 
+    /*
     public Response buildResponse() {
         System.out.println("---Sending response---");
         System.out.println("Enter file name:");
@@ -153,5 +212,5 @@ public class RequestHandler {
             return new Response(404, Request.ContentType.TEXT_PLAIN, path);
         }
     }
-
+    */
 }

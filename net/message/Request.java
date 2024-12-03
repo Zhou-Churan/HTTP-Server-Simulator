@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Request {
 
-    public enum RequestType {GET, POST};
+    public enum RequestType {GET, POST, INVALID};
     public enum ContentType {TEXT_PLAIN, TEXT_HTML, IMAGE_JPG};
 
     private final RequestType requestType;
@@ -17,10 +17,11 @@ public class Request {
     private String body = null;
 
     // GET
-    public Request(RequestType requestType, String hostAddress, int port) {
+    public Request(RequestType requestType, String hostAddress, int port, String path) {
         this.requestType = requestType;
         this.hostAddress = hostAddress;
         this.port = port;
+        this.body = path;
     }
 
     // POST
@@ -51,6 +52,14 @@ public class Request {
         }
     }
 
+    // INVALID
+    public Request(String hostAddress, int port, String method) {
+        this.requestType = RequestType.INVALID;
+        this.hostAddress = hostAddress;
+        this.port = port;
+        this.body = method;
+    }
+
     public RequestType getRequestType() {
         return requestType;
     }
@@ -64,7 +73,7 @@ public class Request {
     }
 
     public String getMessage() {
-        return requestType + (requestType == RequestType.GET ? "" : " " + body) + " HTTP/1.1" + "\nHost: " + hostAddress + ":" + port + (requestType == RequestType.GET ? "" : "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength);
+        return requestType + " " + body + " HTTP/1.1" + "\nHost: " + hostAddress + ":" + port + (requestType == RequestType.GET ? "" : "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength);
     }
 
 }

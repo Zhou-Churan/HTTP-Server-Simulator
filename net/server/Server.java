@@ -13,7 +13,7 @@ public class Server extends Thread {
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(30 * 1000);
+        serverSocket.setSoTimeout(60 * 1000);
     }
 
     private final RequestHandler handler = new RequestHandler();
@@ -36,8 +36,7 @@ public class Server extends Thread {
                 String message = in.readUTF();
                 RequestHandler requestHandler = getRequestHandler();
                 Request request = requestHandler.parseRequest(message);
-                requestHandler.handleRequest(request);
-                Response response = requestHandler.buildResponse();
+                Response response = requestHandler.handleRequest(request);
                 DataOutputStream out = new DataOutputStream(server.getOutputStream());
                 out.writeUTF(response.getMessage());
             }  catch (SocketTimeoutException e) {

@@ -26,7 +26,7 @@ public class ResponseHandler {
 
         int statusCode = -1;
         String contentType = null;
-        String path = message.split("\n")[4];
+        String path = null;
 
         if (statusLineMatch.find()) {
             statusCode = Integer.parseInt(statusLineMatch.group(1));
@@ -36,17 +36,18 @@ public class ResponseHandler {
             contentType = contentTypeMatch.group(1).trim();
         }
 
+        if (message.split("\n").length <= 3) return new Response(statusCode);
+
+        path = message.split("\n")[4];
+
         return new Response(statusCode, Request.ContentType.valueOf(contentType), path);
     }
 
     public void handleResponse(Response response) throws IOException {
         System.out.println("---Received response---");
-        String[] lines = response.getMessage().split("\n");
-        for (int i = 0; i < lines.length - 1; i++) {
-            System.out.println(lines[i]);
-        }
+        System.out.println(response.getMessage());
         int statusCode = response.getStatusCode();
-        if (statusCode < 400 && statusCode != 304) {
+        if (response.getFilePath() != null && statusCode < 400 && statusCode != 304) {
             FileInputStream is = null;
             FileOutputStream os = null;
             String dest;

@@ -14,7 +14,7 @@ public class Client extends Thread {
 
     public Client(String serverName, int port) throws IOException {
         clientSocket = new Socket(serverName, port);
-        clientSocket.setSoTimeout(30 * 1000);
+        clientSocket.setSoTimeout(60 * 1000);
     }
 
     private final ResponseHandler handler = new ResponseHandler();
@@ -40,7 +40,7 @@ public class Client extends Thread {
                     System.out.println("Enter file name: ");
                     String fileName = sc.next();
                     String path = "net/client/" +fileName;
-                    Request.ContentType contentType = null;
+                    Request.ContentType contentType;
                     if (path.endsWith(".txt")) {
                         contentType = Request.ContentType.TEXT_PLAIN;
                     } else if (path.endsWith(".html")) {
@@ -56,13 +56,12 @@ public class Client extends Thread {
                     }
                     request = new Request(RequestType.POST, clientSocket.getLocalSocketAddress().toString(), clientSocket.getLocalPort(), contentType, path);
                 } else if (method.equals("GET")) {
-                    request = new Request(RequestType.GET, clientSocket.getLocalSocketAddress().toString(), clientSocket.getLocalPort());
+                    System.out.println("Enter file name: ");
+                    String fileName = sc.next();
+                    String path = "net/server/" +fileName;
+                    request = new Request(RequestType.GET, clientSocket.getLocalSocketAddress().toString(), clientSocket.getLocalPort(), path);
                 } else {
-                    System.out.println("Invalid request type");
-                    System.out.println("\n");
-                    System.out.println("Do you want to exit the program? [yes/no]");
-                    exit = sc.next();
-                    continue;
+                    request = new Request(clientSocket.getLocalSocketAddress().toString(), clientSocket.getLocalPort(), method);
                 }
                 System.out.println("\n");
                 out.writeUTF(request.getMessage());

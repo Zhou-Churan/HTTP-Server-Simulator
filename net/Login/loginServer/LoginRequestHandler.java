@@ -6,16 +6,14 @@ import server.RequestHandler;
 
 public class LoginRequestHandler extends RequestHandler {
 
+    @Override
     public Request parseRequest(String message) {
         // TODO
         return null;
     }
 
-    public void handleRequest(Request request) {
-        // TODO
-    }
-
-    public Response buildResponse() {
+    @Override
+    public Response handleRequest(Request request) {
         // TODO
         return null;
     }

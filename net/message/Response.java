@@ -19,11 +19,12 @@ public class Response {
         status.put(StatusType.Method_Not_Allowed, 405);
         status.put(StatusType.Internal_Server_Error, 500);
     }
-    private final int statusCode;
-    private final ContentType contentType;
+    private int statusCode;
+    private ContentType contentType;
     private int contentLength = 0;
-    private final String body;
+    private String body;
 
+    // GET
     public Response(int statusCode, ContentType contentType, String path) {
         this.statusCode = statusCode;
         this.body = path;
@@ -56,6 +57,13 @@ public class Response {
         }
     }
 
+    // POST & INVALID
+    public Response(int statusCode) {
+        this.statusCode = statusCode;
+        this.contentType = null;
+        this.body = null;
+    }
+
     public String getFilePath() {
         return body;
     }
@@ -76,6 +84,6 @@ public class Response {
                 break;
             }
         }
-        return "HTTP/1.1 " + statusCode + " " + statusType + "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength + "\nConnection: keep-alive" + "\n" + body;
+        return "HTTP/1.1 " + statusCode + " " + statusType + (contentType != null ? "\nContent-Type: " + contentType + "\nContent-Length: " + contentLength : "" ) + "\nConnection: keep-alive" + (body != null ? "\n" + body : "" ) + (statusCode == 405 ? "\nAllowed: GET, POST" : "");
     }
 }
