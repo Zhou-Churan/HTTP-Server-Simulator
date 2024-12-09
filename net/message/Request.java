@@ -14,7 +14,7 @@ public class Request {
     private final int port;
     private ContentType contentType = null;
     private int contentLength = 0;
-    private String body = null;
+    private final String body;
 
     // GET
     public Request(RequestType requestType, String hostAddress, int port, String path) {

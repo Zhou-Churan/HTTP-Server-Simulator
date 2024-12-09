@@ -36,7 +36,13 @@ public class ResponseHandler {
             contentType = contentTypeMatch.group(1).trim();
         }
 
-        if (message.split("\n").length <= 3) return new Response(statusCode);
+        if (message.split("\n").length <= 3) {
+            if (message.split("\n").length == 3 && statusCode != 405) {
+                path = message.split("\n")[2];
+                return new Response(statusCode, path);
+            }
+            return new Response(statusCode, null);
+        }
 
         path = message.split("\n")[4];
 

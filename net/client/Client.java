@@ -10,7 +10,7 @@ import message.Response;
 
 public class Client extends Thread {
 
-    private final Socket clientSocket;
+    protected final Socket clientSocket;
 
     public Client(String serverName, int port) throws IOException {
         clientSocket = new Socket(serverName, port);

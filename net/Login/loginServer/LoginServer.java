@@ -4,7 +4,6 @@ import server.RequestHandler;
 import server.Server;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class LoginServer extends Server {
 
@@ -19,14 +18,13 @@ public class LoginServer extends Server {
         return handler;
     }
 
-    private final HashMap<String, String> userInfo = new HashMap<>();
-
-    public HashMap<String, String> getUserInfo() {
-        return userInfo;
-    }
-
     public static void main(String[] args) {
-        Server.main(args);
+        try {
+            Thread t = new LoginServer(80);
+            t.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

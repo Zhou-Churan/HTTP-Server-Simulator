@@ -19,10 +19,10 @@ public class Response {
         status.put(StatusType.Method_Not_Allowed, 405);
         status.put(StatusType.Internal_Server_Error, 500);
     }
-    private int statusCode;
-    private ContentType contentType;
+    private final int statusCode;
+    private final ContentType contentType;
     private int contentLength = 0;
-    private String body;
+    private final String body;
 
     // GET
     public Response(int statusCode, ContentType contentType, String path) {
@@ -58,10 +58,10 @@ public class Response {
     }
 
     // POST & INVALID
-    public Response(int statusCode) {
+    public Response(int statusCode, String body) {
         this.statusCode = statusCode;
         this.contentType = null;
-        this.body = null;
+        this.body = body;
     }
 
     public String getFilePath() {

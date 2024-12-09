@@ -144,7 +144,7 @@ public class RequestHandler {
             System.out.println("Do you want to enter mode 500? [yes/no]");
             opt = sc.next();
             if (opt.equals("yes")) {
-                return new Response(500);
+                return new Response(500, null);
             } else {
                 System.out.println("Do you want to move the server url (mode 301/302)? [yes/no]");
                 opt = sc.next();
@@ -157,12 +157,12 @@ public class RequestHandler {
                         statusCode = 302;
                     }
                 }
-                return new Response(statusCode);
+                return new Response(statusCode, null);
             }
         } else {
             System.out.println("---Received INVALID request---");
             System.out.println(request.getMessage());
-            return new Response(405);
+            return new Response(405, null);
         }
     }
 
